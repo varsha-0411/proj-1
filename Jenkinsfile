@@ -89,8 +89,6 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
 }
 
        
-    }
-}
     stage('Deploy Prometheus') {
     steps {
         sh '''
@@ -102,4 +100,6 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
           prom/prometheus
         '''
     }
+}
+	}
 }
