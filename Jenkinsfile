@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/lakshmansrikanth123/poultry-healthy-hens-java.git']])
-            }
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/varsha-0411/proj-1.git']])            }
         }
 
         stage('Build') {
@@ -44,8 +43,9 @@ stage('Download WAR') {
     )]) {
        sh '''
         wget --user=$NEXUS_USER --password=$NEXUS_PASS \
-        http://34.227.197.244:8081/repository/maven-releases/com/poultry/healthy-hens/1.0.${BUILD_NUMBER}/healthy-hens-1.0.${BUILD_NUMBER}.war
+		http://13.125.21.150:8081/repository/maven-releases/com/tes/tes-institute/1.0.${BUILD_NUMBER}/tes-institute-1.0.${BUILD_NUMBER}.war
         '''
+		
 		
     }
   }
@@ -54,7 +54,7 @@ stage('Download WAR') {
         stage('Build Docker Image') {
             steps {
                  sh """
-docker build --no-cache --build-arg WAR_FILE=healthy-hens-1.0.${BUILD_NUMBER}.war -t varsha0411/srik:latest .
+docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.war -t varsha0411/proj1:latest .
 """
             }
         }
@@ -72,7 +72,7 @@ docker build --no-cache --build-arg WAR_FILE=healthy-hens-1.0.${BUILD_NUMBER}.wa
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push varsha0411/srik:latest'
+                sh 'docker push varsha0411/proj1:latest'
             }
         }
 		        stage('K8s Deployment') {
@@ -81,7 +81,7 @@ docker build --no-cache --build-arg WAR_FILE=healthy-hens-1.0.${BUILD_NUMBER}.wa
             sh """
             export KUBECONFIG=$KUBECONFIG
             kubectl get nodes
-            kubectl apply -f fulldep.yml
+            kubectl apply -f tesdep.yml
             kubectl rollout restart deployment myapp-deployment
             """
         }
