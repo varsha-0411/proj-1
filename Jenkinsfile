@@ -91,3 +91,15 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
        
     }
 }
+    stage('Deploy Prometheus') {
+    steps {
+        sh '''
+        docker rm -f prometheus || true
+
+        docker run -d --name prometheus \
+          -p 9090:9090 \
+          -v $WORKSPACE/prometheus.yml:/etc/prometheus/prometheus.yml \
+          prom/prometheus
+        '''
+    }
+}
