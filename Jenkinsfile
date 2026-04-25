@@ -103,15 +103,6 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
     }
 }
 		stage('Deploy Grafana') {
-    steps {
-        sh '''
-        docker run -d --name grafana \
-          -p 3000:3000 \
-          grafana/grafana
-        '''
-    }
-}
-		stage('Deploy Grafana') {
       steps {
         sh '''
         docker rm -f grafana || true
