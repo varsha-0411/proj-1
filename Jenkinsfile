@@ -43,7 +43,7 @@ stage('Download WAR') {
     )]) {
        sh '''
         wget --user=$NEXUS_USER --password=$NEXUS_PASS \
-		http://43.201.247.138:8081/repository/maven-releases/com/tes/tes-institute/1.0.${BUILD_NUMBER}/tes-institute-1.0.${BUILD_NUMBER}.war
+		http://3.39.240.164:8081/repository/maven-releases/com/tes/tes-institute/1.0.${BUILD_NUMBER}/tes-institute-1.0.${BUILD_NUMBER}.war
         '''
 		
 		
