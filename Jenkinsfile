@@ -82,35 +82,29 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
             export KUBECONFIG=$KUBECONFIG
             kubectl get nodes
             kubectl apply -f tesdep.yml
-            kubectl rollout restart deployment myapp-deployment
+           kubectl rollout restart deployment myapp-deployment
+           kubectl rollout status deployment myapp-deployment
             """
         }
     }
 }
 
-       
-    stage('Run Prometheus') {
-    steps {
-        sh '''
-        docker rm -f prometheus || true
+		  stage('Deploy Prometheus') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
 
-        docker run -d \
-          --name prometheus \
-          -p 9090:9090 \
-          -v "$WORKSPACE/prometheus.yml:/etc/prometheus/prometheus.yml" \
-          prom/prometheus
-        '''
-    }
-}
-		stage('Deploy Grafana') {
-      steps {
-        sh '''
-        docker rm -f grafana || true
-        docker run -d --name grafana \
-          -p 3000:3000 \
-          grafana/grafana
-        '''
-      }
-    }
+                    kubectl apply -f prometheus.yml
+                    kubectl rollout status deployment prometheus
+                    kubectl get svc prometheus-service
+                    '''
+                }
+            }
+        }
+
+       
+
+	
 	}
 }
