@@ -89,22 +89,7 @@ docker build --no-cache --build-arg WAR_FILE=tes-institute-1.0.${BUILD_NUMBER}.w
     }
 }
 
-		  stage('Deploy Prometheus') {
-            steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh '''
-                    export KUBECONFIG=$KUBECONFIG
 
-                    kubectl apply -f prometheus.yml
-                    kubectl rollout status deployment prometheus
-                    kubectl get svc prometheus-service
-                    '''
-                }
-            }
-        }
-
-       
-
-	
+    	
 	}
 }
